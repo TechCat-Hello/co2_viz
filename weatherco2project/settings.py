@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'default-secret-key')  # 環境変�
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
 
-ALLOWED_HOSTS = ['co2-viz.onrender.com', 'localhost', '127.0.0.1']    #Render使用
+ALLOWED_HOSTS = ['https://co2-viz-b6d8014c247d.herokuapp.com/', 'localhost', '127.0.0.1']    #Heroku
 
 
 # セッションのセキュリティ設定
