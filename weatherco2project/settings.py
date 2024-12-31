@@ -147,5 +147,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Load environment variables for APIs
-OPENWEATHER_API_KEY = os.getenv('OPENWEATHER_API_KEY')  # OpenWeatherMapのAPIキーを取得
