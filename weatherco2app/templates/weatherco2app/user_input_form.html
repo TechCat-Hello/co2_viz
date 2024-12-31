@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CO₂排出量データ入力フォーム</title>
+    <!-- Bootstrap CSSを使用 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: rgb(185, 211, 190);
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        button {
+            width: 30%;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CO₂排出量検索: データ入力フォーム</h1>
+
+        <!-- エラーメッセージの表示 -->
+        {% if error %}
+        <div class="alert alert-danger" role="alert">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <!-- 入力フォーム -->
+        <div class="form-container text-center">
+            <form method="POST" action="{% url 'weatherco2app:submit_data' %}">
+                {% csrf_token %}
+                
+                <!-- 国名入力 -->
+                <label for="country">国名：</label>
+                <input type="text" id="country" name="country" placeholder="国名" required><br><br>
+                
+                <!-- 開始年の入力（1960年から2024年） -->
+                <label for="start_year">開始年（例: 2005）:</label>
+                <input type="number" id="start_year" name="start_year" placeholder="開始年" min="1960" max="2024" required><br><br>
+                
+                <!-- 終了年の入力（1960年から2024年） -->
+                <label for="end_year">終了年（例: 2020）:</label>
+                <input type="number" id="end_year" name="end_year" placeholder="終了年" min="1960" max="2024" required><br><br>
+
+                <!-- 送信ボタン -->
+                <button type="submit" class="btn btn-success">データを送信</button>
+            </form>
+        </div>
+    </div>
+    <!-- ご利用にあたって -->
+    <div style="margin-top: 20px; padding: 10px; border: 1px solid hsl(150, 27%, 87%); background-color: #f9f9f9;">
+        <p><strong>ご利用にあたって</strong></p>
+        <ul>
+            <li>このアプリで取得できるCO₂排出量データの期間は、世界銀行のAPIを通じて提供されるもので、国によって異なります。</li>
+            <li>一般的に、世界銀行のデータベース「World Development Indicators（WDI）」では、1960年から最新の年までのデータが提供されています。</li>
+            <li>ただし、CO₂排出量データは多くの場合、1970年代以降のデータが利用可能で、最新のデータは数年前のものとなる場合があります。</li>
+        </ul>
+    </div>
+</body>
+</html>
