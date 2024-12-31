@@ -31,8 +31,6 @@ DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['https://co2-viz-b6d8014c247d.herokuapp.com/', 'localhost', '127.0.0.1']    #Heroku
 
-
-
 # セッションのセキュリティ設定
 SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
 
