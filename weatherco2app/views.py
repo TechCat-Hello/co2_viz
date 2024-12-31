@@ -11,6 +11,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib import messages
 import urllib.parse
+import os
 
 # 日本語の国名とISO3コードのマッピング
 country_to_iso3 = {
@@ -99,19 +100,11 @@ def get_iso3_from_japanese_country_name(country_name):
 def set_font():
     """
     フォント設定
-    Windows環境ではMS Gothic、LinuxやRender環境ではDejaVu Sansを使用
+    Windows環境でもLinuxやRender環境でも利用できるフォントを使用
     """
-    os_name = platform.system()
-
-    if os_name == "Windows":
-        # Windowsの場合、MS Gothicを使用
-        font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'
-        prop = font_manager.FontProperties(fname=font_path)
-        plt.rcParams['font.family'] = prop.get_name()
-    else:
-        # LinuxやRender環境ではDejaVu Sansを使用
-        plt.rcParams['font.family'] = 'sans-serif'
-        plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica', 'sans-serif']
+    # 汎用的なフォント設定
+    plt.rcParams['font.family'] = 'sans-serif'
+    plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica', 'sans-serif']
 
 # フォント設定を初期化時に実行
 set_font()
