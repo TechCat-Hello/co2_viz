@@ -108,11 +108,11 @@ def user_input_view(request):
     return render(request, 'weatherco2app/user_input_form.html')
 
 # Windows環境で一般的な日本語フォント（MS Gothic）を指定
-font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'   
+#font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'    #Windows環境のみ Renderではエラー  
 prop = font_manager.FontProperties(fname=font_path)
 
 # 日本語表示の設定
-#plt.rcParams['font.family'] = prop.get_name()    Renderでエラーとなったため、削除
+#plt.rcParams['font.family'] = prop.get_name()    Renderでエラーとなったため、削除 Windowsフォントのため、Linux環境のRenderでエラー
 # 代わりに、以下のようなコードを使用
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica', 'sans-serif']
