@@ -28,7 +28,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'default-secret-key')  # 環境変�
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['your-app.onrender.com', 'your-custom-domain.com']    #RenderでのURLを記入
+
+ALLOWED_HOSTS = [https://co2-viz.onrender.com]    #Render使用の場合、RenderのURLを記入
+
 
 # セッションのセキュリティ設定
 SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
@@ -37,7 +39,7 @@ SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
 CSRF_COOKIE_SECURE = True  # CSRFトークンをHTTPS経由でのみ送信
 
 # HTTPSを強制
-SECURE_SSL_REDIRECT = True  # HTTPでアクセスするとHTTPSにリダイレクトされる
+#SECURE_SSL_REDIRECT = True  # HTTPでアクセスするとHTTPSにリダイレクトされる
 
 SECURE_HSTS_SECONDS = 31536000  # 1年間のHSTS有効期限
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # サブドメインにもHSTSを適用
