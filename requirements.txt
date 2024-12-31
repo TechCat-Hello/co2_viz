@@ -7,6 +7,7 @@ cycler==0.12.1
 Django==5.1.4
 et_xmlfile==2.0.0
 fonttools==4.55.3
+gunicorn==23.0.0
 idna==3.10
 kiwisolver==1.4.8
 matplotlib==3.10.0
@@ -25,5 +26,4 @@ six==1.17.0
 sqlparse==0.5.3
 tzdata==2024.2
 urllib3==2.3.0
-gunicorn==23.0.0
 
