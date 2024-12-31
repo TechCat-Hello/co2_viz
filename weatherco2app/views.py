@@ -109,7 +109,7 @@ def user_input_view(request):
 
 # Windows環境で一般的な日本語フォント（MS Gothic）を指定
 #font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'    #Windows環境のみ Renderではエラー  
-prop = font_manager.FontProperties(fname=font_path)
+#prop = font_manager.FontProperties(fname=font_path)
 
 # 日本語表示の設定
 #plt.rcParams['font.family'] = prop.get_name()    Renderでエラーとなったため、削除 Windowsフォントのため、Linux環境のRenderでエラー
