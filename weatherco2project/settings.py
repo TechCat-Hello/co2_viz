@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'default-secret-key')  # 環境変数からSECRET_KEYを取得
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['your-app.onrender.com', 'your-custom-domain.com']    #RenderでのURLを記入
 
@@ -42,6 +42,10 @@ SECURE_SSL_REDIRECT = True  # HTTPでアクセスするとHTTPSにリダイレ�
 SECURE_HSTS_SECONDS = 31536000  # 1年間のHSTS有効期限
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # サブドメインにもHSTSを適用
 SECURE_HSTS_PRELOAD = True  # HSTSプリロードリストに追加
+
+#ベースディレクトリにstaticfilesフォルダを作成、静的ファイルを保存
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
 
 
 
