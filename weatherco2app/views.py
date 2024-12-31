@@ -1,6 +1,5 @@
-from django.shortcuts import render, redirect
+import platform
 import requests
-#import country_converter as coco  # 国名をISOコードに変換するためのライブラリ
 import matplotlib.pyplot as plt
 import io
 import base64
@@ -8,8 +7,8 @@ from io import BytesIO
 from matplotlib import font_manager
 import csv
 import pandas as pd
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-#from io import StringIO
 from django.contrib import messages
 import urllib.parse
 
@@ -91,31 +90,37 @@ country_to_iso3 = {
     "ジンバブエ": "ZWE"
 }
 
-"""
-    日本語の国名をISO3コードに変換
-    country_nameがリストにない場合は、エラーメッセージを返す
-    """
 def get_iso3_from_japanese_country_name(country_name):
     if country_name in country_to_iso3:
         return country_to_iso3[country_name]
     else:
-        return "Invalid country name"    # 無効な国名の場合にエラーメッセージを返す
+        return "Invalid country name"
+
+def set_font():
+    """
+    フォント設定
+    Windows環境ではMS Gothic、LinuxやRender環境ではDejaVu Sansを使用
+    """
+    os_name = platform.system()
+
+    if os_name == "Windows":
+        # Windowsの場合、MS Gothicを使用
+        font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'
+        prop = font_manager.FontProperties(fname=font_path)
+        plt.rcParams['font.family'] = prop.get_name()
+    else:
+        # LinuxやRender環境ではDejaVu Sansを使用
+        plt.rcParams['font.family'] = 'sans-serif'
+        plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica', 'sans-serif']
+
+# フォント設定を初期化時に実行
+set_font()
 
 def user_input_view(request):
     """
     ユーザー入力フォームを表示
     """
     return render(request, 'weatherco2app/user_input_form.html')
-
-# Windows環境で一般的な日本語フォント（MS Gothic）を指定
-#font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'    #Windows環境のみ Renderではエラー  
-#prop = font_manager.FontProperties(fname=font_path)
-
-# 日本語表示の設定
-#plt.rcParams['font.family'] = prop.get_name()    Renderでエラーとなったため、削除 Windowsフォントのため、Linux環境のRenderでエラー
-# 代わりに、以下のようなコードを使用
-plt.rcParams['font.family'] = 'sans-serif'
-plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica', 'sans-serif']
 
 def submit_data(request):
     if request.method == "POST":
@@ -129,7 +134,6 @@ def submit_data(request):
             start_year = int(start_year)
             end_year = int(end_year)
         except ValueError:
-            # 数字以外が入力された場合のエラーハンドリング
             return render(request, 'weatherco2app/result.html', {"error": "無効な年が選択されました。"})
         
         # 開始年より終了年が前の場合にエラー
@@ -153,9 +157,6 @@ def submit_data(request):
                 response.raise_for_status()
 
                 data = response.json()
-
-                # APIのレスポンスを確認
-                print(f"API Response for {country} ({year}): {data}")
 
                 if data and len(data) > 1 and data[1]:
                     co2_value = data[1][0].get('value', None)
@@ -181,7 +182,7 @@ def submit_data(request):
             plt.bar(years, emissions)
             plt.title(f"CO₂ Emissions for {country_name_for_title} from {start_year} to {end_year}")
             plt.xlabel("Year")
-            plt.ylabel("CO₂ Emissions (MtCO₂e)")
+            plt.ylabel("CO₂ Emissions (MtCO2e)")
             plt.tight_layout()
 
             # 画像をBase64にエンコード
@@ -281,5 +282,5 @@ def download_excel(co2_data, country):
     with pd.ExcelWriter(response, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name='CO2 Emissions')
 
-    return response   
+    return response
 
