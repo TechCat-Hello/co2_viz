@@ -112,7 +112,10 @@ font_path = 'C:\\Windows\\Fonts\\msgothic.ttc'
 prop = font_manager.FontProperties(fname=font_path)
 
 # 日本語表示の設定
-plt.rcParams['font.family'] = prop.get_name()
+#plt.rcParams['font.family'] = prop.get_name()    Renderでエラーとなったため、削除
+# 代わりに、以下のようなコードを使用
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica', 'sans-serif']
 
 def submit_data(request):
     if request.method == "POST":
