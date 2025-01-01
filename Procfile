@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn weatherco2project.wsgi:application
