@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: co2_viz
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn weatherco2project.wsgi:application
