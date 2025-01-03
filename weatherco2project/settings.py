@@ -32,7 +32,10 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+if '' in ALLOWED_HOSTS:  # 環境変数が設定されていない場合のデフォルト値を調整
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+
  
 
 # セッションのセキュリティ設定
