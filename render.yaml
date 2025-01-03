@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: co2_viz
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: |
-      fc-cache -f -v && gunicorn weatherco2project.wsgi:application
