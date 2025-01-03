@@ -13,16 +13,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-import dj_database_url  # デプロイ時に追加した
-import logging    #ログ確認用・削除予定
+import dj_database_url  
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')    # 環境変数から取得
@@ -36,8 +31,6 @@ ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
 if '' in ALLOWED_HOSTS:  # 環境変数が設定されていない場合のデフォルト値を調整
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 
- 
-
 # セッションのセキュリティ設定
 SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
 
@@ -45,7 +38,7 @@ SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
 CSRF_COOKIE_SECURE = True  # CSRFトークンをHTTPS経由でのみ送信
 
 # HTTPSを強制
-#SECURE_SSL_REDIRECT = True  # HTTPでアクセスするとHTTPSにリダイレクトされる
+SECURE_SSL_REDIRECT = True  # HTTPでアクセスするとHTTPSにリダイレクトされる
 
 SECURE_HSTS_SECONDS = 31536000  # 1年間のHSTS有効期限
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # サブドメインにもHSTSを適用
@@ -98,13 +91,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'weatherco2project.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 # もしHeroku環境であればPostgreSQLを使用し、ローカル開発環境であればSQLiteを使用
 if os.getenv('DJANGO_ENV') == 'production':
+    DATABASE_URL = os.getenv('DATABASE_URL')
+    if not DATABASE_URL:
+        raise ValueError("DATABASE_URL is not set in the environment.")
+    
     DATABASES = {
-        'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+        'default': dj_database_url.config(default=DATABASE_URL)
     }
 else:
     DATABASES = {
@@ -114,9 +108,6 @@ else:
         }
     }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -134,9 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -144,15 +132,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
-STATIC_URL = 'static/'
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
