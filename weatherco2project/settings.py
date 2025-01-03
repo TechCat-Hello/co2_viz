@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
-import dj_database_url  # デプロイ時に追加
+import dj_database_url  # デプロイ時に追加した
+import logging    #ログ確認用・削除予定
 
 load_dotenv()
 
@@ -24,13 +25,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')  # 環境変数からSECRET_KEYを取得
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')    # 環境変数から取得
+if not SECRET_KEY:
+    raise ValueError("DJANGO_SECRET_KEY is not set in the environment.")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
+DEBUG = os.getenv('DEBUG') == 'True'
 
-
-ALLOWED_HOSTS = ['co2-viz-b6d8014c247d.herokuapp.com/', 'localhost', '127.0.0.1']    #Heroku
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
+ 
 
 # セッションのセキュリティ設定
 SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
@@ -48,9 +51,6 @@ SECURE_HSTS_PRELOAD = True  # HSTSプリロードリストに追加
 #ベースディレクトリにstaticfilesフォルダを作成、静的ファイルを保存
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-
-
-
 
 # Application definition
 

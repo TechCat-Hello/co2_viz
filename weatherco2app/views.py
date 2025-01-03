@@ -1,6 +1,8 @@
+import matplotlib
+matplotlib.use('Agg')  # バックエンドをAggに設定
+import matplotlib.pyplot as plt
 import platform
 import requests
-import matplotlib.pyplot as plt
 import io
 import base64
 from io import BytesIO
@@ -13,6 +15,14 @@ from django.contrib import messages
 import urllib.parse
 import os
 
+def set_font():
+    """
+    フォント設定
+    Windows環境でもLinuxやRender環境でも利用できるフォントを使用
+    """
+    # デフォルトフォントを指定
+    plt.rcParams['font.family'] = 'DejaVu Sans'  
+    
 # 日本語の国名とISO3コードのマッピング
 country_to_iso3 = {
     "アフガニスタン": "AFG",
@@ -97,15 +107,6 @@ def get_iso3_from_japanese_country_name(country_name):
     else:
         return "Invalid country name"
 
-def set_font():
-    """
-    フォント設定
-    Windows環境でもLinuxやRender環境でも利用できるフォントを使用
-    """
-    # 汎用的なフォント設定
-    plt.rcParams['font.family'] = 'sans-serif'
-    plt.rcParams['font.sans-serif'] = ['DejaVu Sans', 'Arial', 'Helvetica', 'sans-serif']
-
 # フォント設定を初期化時に実行
 set_font()
 
@@ -128,7 +129,7 @@ def submit_data(request):
             end_year = int(end_year)
         except ValueError:
             return render(request, 'weatherco2app/result.html', {"error": "無効な年が選択されました。"})
-        
+
         # 開始年より終了年が前の場合にエラー
         if end_year < start_year:
             return render(request, 'weatherco2app/result.html', {"error": "終了年は開始年以降の年を選択してください。"})
@@ -169,7 +170,7 @@ def submit_data(request):
             emissions = [item['co2_emission'] if isinstance(item['co2_emission'], (int, float)) else 0 for item in co2_data]
 
             # 日本語の国名をタイトルに表示
-            country_name_for_title = country  
+            country_name_for_title = country
 
             plt.figure(figsize=(8, 5))
             plt.bar(years, emissions)
@@ -207,7 +208,7 @@ def submit_data(request):
         if 'download' in request.GET:
             co2_data = request.session.get('co2_data')
             country = request.session.get('country')
-            
+
             if not co2_data or not country:
                 messages.error(request, "データが見つかりません。再度検索してください。")
                 return redirect('weatherco2app:user_input')
@@ -250,7 +251,7 @@ def download_csv(co2_data, country):
     # CSV書き込み
     writer = csv.writer(response)
     writer.writerow(['Year', 'CO2 Emission (MtCO2e)'])
-    
+
     for item in co2_data:
         writer.writerow([item['year'], item['co2_emission']])
 
@@ -276,4 +277,3 @@ def download_excel(co2_data, country):
         df.to_excel(writer, index=False, sheet_name='CO2 Emissions')
 
     return response
-
