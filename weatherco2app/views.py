@@ -175,7 +175,7 @@ def submit_data(request):
         except requests.exceptions.RequestException as e:
             co2_data = {"error": f"Failed to fetch data from World Bank API: {e}"}
 
-        # グラフの生成
+        # グラフ生成
         graph_data = None
         if co2_data and isinstance(co2_data, list):
             years = [item['year'] for item in co2_data]
