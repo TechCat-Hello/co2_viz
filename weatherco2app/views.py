@@ -181,12 +181,9 @@ def submit_data(request):
             years = [item['year'] for item in co2_data]
             emissions = [item['co2_emission'] if isinstance(item['co2_emission'], (int, float)) else 0 for item in co2_data]
 
-            # 日本語の国名をタイトルに表示
-            country_name_for_title = country
-
             plt.figure(figsize=(8, 5))
             plt.bar(years, emissions)
-            plt.title(f"CO₂ Emissions for {country_name_for_title} from {start_year} to {end_year}")
+            plt.title(f"CO₂ Emissions from {start_year} to {end_year}")
             plt.xlabel("Year")
             plt.ylabel("CO₂ Emissions (MtCO2e)")
             plt.tight_layout()
