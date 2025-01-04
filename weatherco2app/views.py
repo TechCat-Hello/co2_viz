@@ -18,14 +18,22 @@ import os
 def set_font():
     """
     フォント設定
-    Linux環境で日本語フォントを指定
+    複数の環境に対応したフォント設定
     """
-    font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'  # Notoフォントのパス
-    if os.path.exists(font_path):
-        plt.rcParams['font.family'] = font_manager.FontProperties(fname=font_path).get_name()
-    else:
-        # デフォルトフォント
-        plt.rcParams['font.family'] = 'DejaVu Sans' 
+    font_paths = [
+        '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
+        '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
+        '/app/.fonts/NotoSansCJK-Regular.ttc'  # Heroku環境用
+    ]
+    
+    for font_path in font_paths:
+        if os.path.exists(font_path):
+            plt.rcParams['font.family'] = font_manager.FontProperties(fname=font_path).get_name()
+            return
+    
+    # デフォルトフォント
+    plt.rcParams['font.family'] = 'DejaVu Sans'
+
     
 # 日本語の国名とISO3コードのマッピング
 country_to_iso3 = {
