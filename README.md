@@ -1,81 +1,107 @@
 # CO₂ Emission Data Visualizer  
-このアプリケーションは、CO₂排出データを可視化するツールです。　　
-指定した国、指定した開始年から終了年までのCO₂排出量データを取得してグラフに表示します。　　
+このアプリケーションは、CO₂排出データを可視化するツールです。  
+指定した国、指定した開始年から終了年までのCO₂排出量データを取得してグラフに表示します。  
 データはCSVやExcelファイルでダウンロードできます。
 
 ## 主な機能
 - 国名の入力、プルダウンで期間の指定
-- 取得したデータを表とグラフ化して表示
+- 取得したデータを表、およびグラフで表示
 - データをCSV/Excel形式でダウンロード可能
-
-
+- エラーメッセージ表示機能（不正な入力の場合）
 
 ## アプリのスクリーンショット
 
 ### メインページ
-![Main Page](image/main_page.png)
+![Main Page](image/main_co2viz_page.png)
 
-### グラフの画面
-![Graph Page](image/graph_page.png)
 
-### CSV・Excelダウンロードボタンの画面
-![Download Buttons](image/download_buttons.png)
+### 結果画面
+![Graph Page](image/graph_co2viz_page.png)
 
-### CSVの画面
-![CSV Screen](image/csv_view.png)
 
-### Excelの画面
-![Excel Screen](image/excel_view.png)
+### CSV画面
+![CSV Screen](image/csv_co2viz_view.png)
+
+
+### Excel画面
+![Excel Screen](image/excel_co2viz_view.png)
+
 
 ### エラー画面
-![Error Screen](image/error_page.png)
+![Error Screen](image/error_co2viz1_page.png)
 
-## 機能一覧
-- CO₂排出量と経過年数を入力し、将来の気温上昇を予測。
-- グラフで予測結果を表示。  
-- 結果データを **CSV** および **Excel** ファイルでダウンロード可能。  
-- エラーメッセージ表示機能（不正な入力の場合）  
+![Error Screen](image/error_co2viz2_page.png)
+
+
+## 動作環境
+このアプリは、以下の環境で動作します。
+
+- **OS**: 任意のOS（Windows, macOS, Linux）
+- **Python**: 3.x
+- **ライブラリ**: 以下のPythonパッケージが必要です。
+  - Django
+  - Requests
+  - その他、`requirements.txt` に記載の依存関係
+
 
 ## インストール方法
 
-1. リポジトリをクローンします:  
+以下の手順に従って、ローカル環境にアプリをインストールし、実行できます。
+
+1. GitHubリポジトリをローカルにクローンします。
 ```bash  
-https://github.com/TechCat-Hello/global_warming_simulation.git
+https://github.com/TechCat-Hello/co2_viz.git  
+cd your-repository
 ```
 
-2. 必要なライブラリをインストールします:    
+2. Pythonの仮想環境を作成します。  
+```bash  
+python3 -m venv venv
+```
+
+3. 仮想環境を有効化します。
+- Windowsの場合
+```bash  
+venv\Scripts\activate
+```
+
+- Mac/Linuxの場合
+```bash  
+source venv/bin/activate
+```
+
+4. 必要な依存関係をインストールします。  
+次に、requirements.txtに記載されている依存関係をインストールします。 
 ```bash  
 pip install -r requirements.txt
 ```
 
-3. Flaskアプリを起動します。  
-```bash  
-python app.py
+5. .envファイルの設定をします。  
+アプリケーションがAPIにアクセスするために必要なAPIキーを設定します。    
+プロジェクトのルートディレクトリに.envという名前のファイルを作成し、以下の内容を `.env` ファイルに追加してください。  
+```env
+DEBUG=False
+DJANGO_SECRET_KEY=your_django_secret_key
+DJANGO_ALLOWED_HOSTS=your_allowed_hosts  
 ```
 
-4. ブラウザで以下のURLを開きます。
-```
-http://127.0.0.1:5000
-```
+6. アプリケーションをローカルで実行します。  
+```bash  
+python manage.py runserver
+```  
+
+7. ブラウザで http://127.0.0.1:8000 にアクセスして、アプリを確認します。
+
 
 ## 使い方
-1. CO₂の年間排出量（Gt単位）を入力します。
-2. 経過年数を入力します。
-3. 「送信」ボタンをクリックして予測結果を確認します。
-4. グラフやデータをダウンロードする場合、画面下部の「CSV」または「Excel」ボタンをクリックします。
-
-## 動作環境
-- Python 3.6 以上
-- Flask 2.0
-- pandas
-- matplotlib
-- numpy
-- openpyxl
-- gunicorn
+1. 検索したい国の名前を日本語で入力します。
+2. 開始年と終了年をプルダウンで選択します。
+3. 「データを送信」ボタンをクリックして結果を確認します。
+4. データをダウンロードする場合、画面下部の「CSVとしてダウンロード」または「Excelとしてダウンロード」ボタンをクリックします。
 
 ## License
 This project is licensed under the MIT License.  
-See the [MIT License](https://github.com/TechCat-Hello/global_warming_simulation/blob/main/LICENSE) file for more details.
+See the [MIT License](https://github.com/TechCat-Hello/co2_viz/blob/main/LICENSE) file for more details.
 
 ## Contributing
 私はこのプロジェクトを公開しています。  
@@ -139,19 +165,5 @@ GitHub上で、あなたのリポジトリのページを開き、「Pull Reques
 ## Thank You!
 このプロジェクトへの貢献をありがとうございます！  
 あなたの貢献がプロジェクトをさらに素晴らしいものにします。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
