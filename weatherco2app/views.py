@@ -18,10 +18,14 @@ import os
 def set_font():
     """
     フォント設定
-    Windows環境でもLinuxやRender環境でも利用できるフォントを使用
+    Linux環境で日本語フォントを指定
     """
-    # デフォルトフォントを指定
-    plt.rcParams['font.family'] = 'DejaVu Sans'  
+    font_path = '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc'  # Notoフォントのパス
+    if os.path.exists(font_path):
+        plt.rcParams['font.family'] = font_manager.FontProperties(fname=font_path).get_name()
+    else:
+        # デフォルトフォント
+        plt.rcParams['font.family'] = 'DejaVu Sans' 
     
 # 日本語の国名とISO3コードのマッピング
 country_to_iso3 = {
