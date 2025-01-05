@@ -29,13 +29,30 @@ def set_font():
     
     for font_path in font_paths:
         if os.path.exists(font_path):
-            font = font_manager.FontProperties(fname=font_path)
-            plt.rcParams['font.family'] = font.get_name()
-            plt.rcParams['font.sans-serif'] = [font.get_name()] + plt.rcParams['font.sans-serif']
+            plt.rcParams['font.family'] = font_manager.FontProperties(fname=font_path).get_name()
             return
     
     # デフォルトフォント
-    plt.rcParams['font.family'] = 'DejaVu Sans'
+    plt.rcParams['font.family'] = 'sans-serif'
+
+    """
+    フォント設定
+    複数の環境に対応したフォント設定
+    """
+    font_paths = [
+        '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
+        '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
+        '/app/.fonts/NotoSansCJK-Regular.ttc'  # Heroku環境用
+    ]
+    
+    for font_path in font_paths:
+        if os.path.exists(font_path):
+            plt.rcParams['font.family'] = font_manager.FontProperties(fname=font_path).get_name()
+            return
+    
+    # デフォルトフォント
+    plt.rcParams['font.family'] = 'sans-serif'
+
     
 # 日本語の国名とISO3コードのマッピング
 country_to_iso3 = {
@@ -208,7 +225,7 @@ def submit_data(request):
 
             plt.figure(figsize=(8, 5))
             plt.bar(years, emissions)
-            plt.title(f"CO₂ Emissions in {english_country_name} from {start_year} to {end_year}")  
+            plt.title(f"CO₂ Emissions in {english_country_name} from {start_year} to {end_year}", fontname='DejaVu Sans')
             plt.xlabel("Year")
             plt.ylabel("CO₂ Emissions (MtCO2e)")
             plt.tight_layout()
