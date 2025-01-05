@@ -21,7 +21,7 @@ def set_font():
     フォント設定
     """
     try:
-        # フォントパスを直接指定
+        # DejaVu Sansフォントを指定
         font_path = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
         font_prop = font_manager.FontProperties(fname=font_path)
         plt.rcParams['font.family'] = font_prop.get_name()
