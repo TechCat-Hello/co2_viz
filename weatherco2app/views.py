@@ -21,6 +21,12 @@ def set_font():
     フォント設定
     複数の環境に対応したフォント設定
     """
+    try:
+        # DejaVu Sansはmatplotlibでデフォルトのフォントで、英語文字に対応
+        plt.rcParams['font.family'] = 'DejaVu Sans'
+    except Exception as e:
+        print(f"Font setting failed: {e}")
+        
     font_paths = [
         '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
         '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
