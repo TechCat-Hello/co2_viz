@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 import urllib.parse
 import os
+import pycountry
 
 def set_font():
     """
@@ -128,6 +129,16 @@ def user_input_view(request):
     """
     return render(request, 'weatherco2app/user_input_form.html')
 
+def get_country_name_from_iso3(iso3_code):
+    """
+    ISO3コードから国名（英語）を取得
+    """
+    try:
+        country = pycountry.countries.get(alpha_3=iso3_code)
+        return country.name if country else "Unknown"
+    except KeyError:
+        return "Unknown"
+
 def submit_data(request):
     if request.method == "POST":
         # ユーザー入力を取得
@@ -153,6 +164,9 @@ def submit_data(request):
             # 国名が無効な場合、エラーメッセージを表示
             error_message = f"{country}は有効な国名ではありません。正しい国名を入力してください。"
             return render(request, 'weatherco2app/error.html', {"error": error_message})
+
+        # ISO3コードから英語の国名を取得
+        english_country_name = get_country_name_from_iso3(country_code)
 
         # World Bank APIからデータ取得
         try:
@@ -183,7 +197,7 @@ def submit_data(request):
 
             plt.figure(figsize=(8, 5))
             plt.bar(years, emissions)
-            plt.title(f"CO₂ Emissions from {start_year} to {end_year}")
+            plt.title(f"CO₂ Emissions in {english_country_name} from {start_year} to {end_year}")  
             plt.xlabel("Year")
             plt.ylabel("CO₂ Emissions (MtCO2e)")
             plt.tight_layout()
