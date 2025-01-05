@@ -29,12 +29,13 @@ def set_font():
     
     for font_path in font_paths:
         if os.path.exists(font_path):
-            plt.rcParams['font.family'] = font_manager.FontProperties(fname=font_path).get_name()
+            font = font_manager.FontProperties(fname=font_path)
+            plt.rcParams['font.family'] = font.get_name()
+            plt.rcParams['font.sans-serif'] = [font.get_name()] + plt.rcParams['font.sans-serif']
             return
     
     # デフォルトフォント
     plt.rcParams['font.family'] = 'DejaVu Sans'
-
     
 # 日本語の国名とISO3コードのマッピング
 country_to_iso3 = {
@@ -119,6 +120,16 @@ def get_iso3_from_japanese_country_name(country_name):
         return country_to_iso3[country_name]
     else:
         return "Invalid country name"
+
+def get_country_name_from_iso3(iso3_code):
+    """
+    ISO3コードから国名（英語）を取得
+    """
+    try:
+        country = pycountry.countries.get(alpha_3=iso3_code)
+        return country.name if country else "Unknown"
+    except KeyError:
+        return "Unknown"
 
 # フォント設定を初期化時に実行
 set_font()
