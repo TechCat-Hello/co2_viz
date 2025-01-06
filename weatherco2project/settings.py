@@ -38,7 +38,7 @@ SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
 CSRF_COOKIE_SECURE = True  # CSRFトークンをHTTPS経由でのみ送信
 
 #HTTPSを強制
-#SECURE_SSL_REDIRECT = True  # HTTPでアクセスするとHTTPSにリダイレクトされる
+SECURE_SSL_REDIRECT = True  # HTTPでアクセスするとHTTPSにリダイレクトされる
 
 SECURE_HSTS_SECONDS = 31536000  # 1年間のHSTS有効期限
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # サブドメインにもHSTSを適用
