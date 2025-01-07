@@ -34,8 +34,6 @@ https://co2-viz-b6d8014c247d.herokuapp.com
 ### エラー画面
 ![Error Screen](image/error_co2viz1_page.png)
 
-![Error Screen](image/error_co2viz2_page.png)
-
 
 ## 動作環境
 このアプリは、以下の環境で動作します。
