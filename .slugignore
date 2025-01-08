@@ -5,3 +5,6 @@ venv/
 .env
 tests/
 __pycache__/
+*.pdf
+*.psd
+/tests/
