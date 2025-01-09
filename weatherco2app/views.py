@@ -1,9 +1,7 @@
 import matplotlib
 matplotlib.use('Agg')  # バックエンドをAggに設定
 import matplotlib.pyplot as plt
-import platform
 import requests
-import io
 import base64
 from io import BytesIO
 from matplotlib import font_manager
@@ -17,24 +15,32 @@ import os
 import pycountry
 
 def set_font():
-    """
-    フォント設定
-    """
-    try:
-        # DejaVu Sansフォントを指定
-        font_path = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+    font_paths = [
+        '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+        '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
+        '/app/.fonts/NotoSansCJK-Regular.ttc'  # Heroku環境用
+    ]
+
+    for font_path in font_paths:
+        try:
+            font_prop = font_manager.FontProperties(fname=font_path)
+            plt.rcParams['font.family'] = font_prop.get_name()
+            print(f"Font set to: {font_prop.get_name()}")
+            return
+        except Exception as e:
+            print(f"Failed to set font {font_path}: {e}")
+    
+    # すべてのフォント設定に失敗した場合、デフォルトフォントを設定
+    print("Setting default sans-serif font")
+    plt.rcParams['font.family'] = 'sans-serif'
+
+    '''
         font_prop = font_manager.FontProperties(fname=font_path)
         plt.rcParams['font.family'] = font_prop.get_name()
         print(f"Font set to: {font_prop.get_name()}")
     except Exception as e:
         print(f"Font setting failed: {e}")
 
-    font_paths = [
-        '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
-        '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
-        '/app/.fonts/NotoSansCJK-Regular.ttc'  # Heroku環境用
-    ]
-    
     for font_path in font_paths:
         if os.path.exists(font_path):
             plt.rcParams['font.family'] = font_manager.FontProperties(fname=font_path).get_name()
@@ -42,25 +48,7 @@ def set_font():
     
     # デフォルトフォント
     plt.rcParams['font.family'] = 'sans-serif'
-
-    """
-    フォント設定
-    複数の環境に対応したフォント設定
-    """
-    font_paths = [
-        '/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc',
-        '/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc',
-        '/app/.fonts/NotoSansCJK-Regular.ttc'  # Heroku環境用
-    ]
-    
-    for font_path in font_paths:
-        if os.path.exists(font_path):
-            plt.rcParams['font.family'] = font_manager.FontProperties(fname=font_path).get_name()
-            return
-    
-    # デフォルトフォント
-    plt.rcParams['font.family'] = 'sans-serif'
-
+    '''
     
 # 日本語の国名とISO3コードのマッピング
 country_to_iso3 = {
@@ -164,16 +152,6 @@ def user_input_view(request):
     ユーザー入力フォームを表示
     """
     return render(request, 'weatherco2app/user_input_form.html')
-
-def get_country_name_from_iso3(iso3_code):
-    """
-    ISO3コードから国名（英語）を取得
-    """
-    try:
-        country = pycountry.countries.get(alpha_3=iso3_code)
-        return country.name if country else "Unknown"
-    except KeyError:
-        return "Unknown"
 
 def submit_data(request):
     if request.method == "POST":
