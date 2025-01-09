@@ -33,22 +33,6 @@ def set_font():
     # すべてのフォント設定に失敗した場合、デフォルトフォントを設定
     print("Setting default sans-serif font")
     plt.rcParams['font.family'] = 'sans-serif'
-
-    '''
-        font_prop = font_manager.FontProperties(fname=font_path)
-        plt.rcParams['font.family'] = font_prop.get_name()
-        print(f"Font set to: {font_prop.get_name()}")
-    except Exception as e:
-        print(f"Font setting failed: {e}")
-
-    for font_path in font_paths:
-        if os.path.exists(font_path):
-            plt.rcParams['font.family'] = font_manager.FontProperties(fname=font_path).get_name()
-            return
-    
-    # デフォルトフォント
-    plt.rcParams['font.family'] = 'sans-serif'
-    '''
     
 # 日本語の国名とISO3コードのマッピング
 country_to_iso3 = {
