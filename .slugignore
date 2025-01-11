@@ -7,6 +7,9 @@ tests/
 __pycache__/
 *.pdf
 *.psd
-/tests/
-/test
-/spec
+test/
+spec/
+*.pyc
+*.swp
+.pytest_cache/
+git/
