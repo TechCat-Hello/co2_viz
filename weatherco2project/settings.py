@@ -64,7 +64,7 @@ ROOT_URLCONF = 'weatherco2project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS':  [BASE_DIR / 'weatherco2app/templates'],    # テンプレートのルートディレクトリ
+        'DIRS':  [BASE_DIR / 'weatherco2app/templates/weatherco2app'],    
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,3 +124,24 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',  # 必要に応じて INFO, WARNING, ERROR に変更可能
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',  # 必要に応じて DEBUG, INFO などに変更
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # 開発環境では DEBUG、本番では INFO 推奨
+            'propagate': True,
+        },
+    },
+}

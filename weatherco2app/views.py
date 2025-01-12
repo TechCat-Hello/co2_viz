@@ -13,6 +13,15 @@ from django.contrib import messages
 import urllib.parse
 import os
 import pycountry
+from django.views.generic import TemplateView
+
+class YourView(TemplateView):
+    template_name = 'your_template.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['error'] = None  
+        return context
 
 def set_font():
     font_paths = [
