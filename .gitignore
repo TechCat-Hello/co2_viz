@@ -1,11 +1,10 @@
-co2_temperature_simulation.csv
-co2_temperature_simulation.xlsx
+/.co2_temperature_simulation.csv/
+/co2_temperature_simulation.xlsx/
 .env
 __pycache__/
 *.pyc
+db.sqlite3
 /gis/
+staticfiles/
 *.sqlite3
 venv/
-Thumbs.db
-*.swp
-*.log
