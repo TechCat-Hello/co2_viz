@@ -128,17 +128,18 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'file': {
+        'console': {
             'level': 'ERROR',
-            'class': 'logging.FileHandler',
-            'filename': 'C:/path/to/django/errors.log', 
+            'class': 'logging.StreamHandler',
+            'stream': 'ext://sys.stdout',  # stdoutに出力
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['console'],
             'level': 'ERROR',
             'propagate': True,
         },
     },
 }
+
