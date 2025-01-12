@@ -128,19 +128,16 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
-        'console': {
-            'level': 'DEBUG',  # 必要に応じて INFO, WARNING, ERROR に変更可能
-            'class': 'logging.StreamHandler',
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'C:/path/to/django/errors.log', 
         },
-    },
-    'root': {
-        'handlers': ['console'],
-        'level': 'WARNING',  # 必要に応じて DEBUG, INFO などに変更
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
-            'level': 'DEBUG',  # 開発環境では DEBUG、本番では INFO 推奨
+            'handlers': ['file'],
+            'level': 'ERROR',
             'propagate': True,
         },
     },
