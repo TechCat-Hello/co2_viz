@@ -13,11 +13,14 @@ if not SECRET_KEY:
     raise ValueError("DJANGO_SECRET_KEY is not set in the environment.")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 'True'
+DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
 if not ALLOWED_HOSTS or ALLOWED_HOSTS == ['']:
-    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '[::1]']
+    if DEBUG:
+        ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '[::1]']
+    else:
+        raise ValueError("ALLOWED_HOSTS must be set for production environments")
 
 # セッションのセキュリティ設定
 SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
