@@ -15,9 +15,9 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(',')
-if '' in ALLOWED_HOSTS:  # 環境変数が設定されていない場合のデフォルト値を調整
-    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+if not ALLOWED_HOSTS or ALLOWED_HOSTS == ['']:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '[::1]']
 
 # セッションのセキュリティ設定
 SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
@@ -26,7 +26,7 @@ SESSION_COOKIE_SECURE = True  # セッションIDをHTTPS経由でのみ送信
 CSRF_COOKIE_SECURE = True  # CSRFトークンをHTTPS経由でのみ送信
 
 #HTTPSを強制
-SECURE_SSL_REDIRECT = True  # HTTPでアクセスするとHTTPSにリダイレクトされる
+SECURE_SSL_REDIRECT = True  # HTTPでアクセスするとHTTPSにリダイレクトされる   
 
 SECURE_HSTS_SECONDS = 31536000  # 1年間のHSTS有効期限
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # サブドメインにもHSTSを適用
