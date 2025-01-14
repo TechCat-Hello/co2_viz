@@ -83,8 +83,16 @@ pip install -r requirements.txt
 プロジェクトのルートディレクトリに.envという名前のファイルを作成し、以下の内容を `.env` ファイルに追加してください。  
 ```env
 DEBUG=False
+- 開発環境では `True`
+- 本番環境では `False`
 DJANGO_SECRET_KEY=your_django_secret_key
 DJANGO_ALLOWED_HOSTS=your_allowed_hosts  
+
+DJANGO_ENV: 環境タイプを指定します。
+ - 開発環境の場合: `development`
+ - 本番環境の場合: `production`
+
+DATABASE_URL: **PostgreSQLの接続UR
 ```
 
 6. アプリケーションをローカルで実行します。  
