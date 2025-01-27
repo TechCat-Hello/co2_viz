@@ -15,14 +15,6 @@ import os
 import pycountry
 from django.views.generic import TemplateView
 
-class YourView(TemplateView):
-    template_name = 'your_template.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['error'] = None  
-        return context
-
 def set_font():
     font_paths = [
         '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
@@ -127,10 +119,8 @@ def get_iso3_from_japanese_country_name(country_name):
     else:
         return "Invalid country name"
 
+#  ISO3コードから国名（英語）を取得
 def get_country_name_from_iso3(iso3_code):
-    """
-    ISO3コードから国名（英語）を取得
-    """
     try:
         country = pycountry.countries.get(alpha_3=iso3_code)
         return country.name if country else "Unknown"
@@ -140,10 +130,8 @@ def get_country_name_from_iso3(iso3_code):
 # フォント設定を初期化時に実行
 set_font()
 
+#ユーザー入力フォームを表示
 def user_input_view(request):
-    """
-    ユーザー入力フォームを表示
-    """
     return render(request, 'weatherco2app/user_input_form.html')
 
 def submit_data(request):
@@ -153,7 +141,7 @@ def submit_data(request):
         start_year = request.POST.get("start_year", "").strip()
         end_year = request.POST.get("end_year", "").strip()
 
-        # 数字に変換
+        # 整数に変換
         try:
             start_year = int(start_year)
             end_year = int(end_year)
@@ -269,10 +257,9 @@ def submit_data(request):
 
     return render(request, 'weatherco2app/user_input_form.html')
 
+# CO2データをCSVとしてダウンロード
 def download_csv(co2_data, country):
-    """
-    CO2データをCSVとしてダウンロード
-    """
+   
     # レスポンスの設定
     response = HttpResponse(content_type='text/csv')
     safe_filename = urllib.parse.quote(f"{country}_co2_data.csv")
@@ -287,10 +274,9 @@ def download_csv(co2_data, country):
 
     return response
 
+# CO2データをExcelファイルとしてダウンロード
 def download_excel(co2_data, country):
-    """
-    CO2データをExcelファイルとしてダウンロード
-    """
+
     # pandasを使ってExcelファイルを生成
     df = pd.DataFrame(co2_data)
 
