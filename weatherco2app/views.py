@@ -166,23 +166,41 @@ def submit_data(request):
         # World Bank APIからデータ取得
         try:
             co2_data = []
-            for year in range(int(start_year), int(end_year) + 1):
-                api_url = f"http://api.worldbank.org/v2/country/{country_code}/indicator/EN.GHG.CO2.MT.CE.AR5?date={year}&format=json"
-                response = requests.get(api_url)
-                response.raise_for_status()
+            # 年範囲指定で一括取得（効率化）
+            date_range = f"{start_year}:{end_year}"
+            api_url = f"http://api.worldbank.org/v2/country/{country_code}/indicator/EN.GHG.CO2.MT.CE.AR5?date={date_range}&format=json&per_page=500"
+            
+            # タイムアウトを設定（10秒）
+            response = requests.get(api_url, timeout=10)
+            response.raise_for_status()
 
-                data = response.json()
+            data = response.json()
 
-                if data and len(data) > 1 and data[1]:
-                    co2_value = data[1][0].get('value', None)
-                    if co2_value is not None:
-                        co2_data.append({"year": year, "co2_emission": co2_value})
-                    else:
+            if data and len(data) > 1 and data[1]:
+                # データを年でソート
+                for item in sorted(data[1], key=lambda x: x.get('date', ''), reverse=False):
+                    year = item.get('date')
+                    co2_value = item.get('value', None)
+                    if year:
+                        co2_data.append({"year": int(year), "co2_emission": co2_value if co2_value is not None else "No data"})
+                
+                # 指定範囲内のすべての年にデータを埋める
+                existing_years = {item['year'] for item in co2_data}
+                for year in range(start_year, end_year + 1):
+                    if year not in existing_years:
                         co2_data.append({"year": year, "co2_emission": "No data"})
-                else:
+                
+                # 年でソート
+                co2_data = sorted(co2_data, key=lambda x: x['year'])
+            else:
+                # データが全くない場合
+                for year in range(start_year, end_year + 1):
                     co2_data.append({"year": year, "co2_emission": "No data"})
+                    
+        except requests.exceptions.Timeout:
+            return render(request, 'weatherco2app/error.html', {"error": "APIリクエストがタイムアウトしました。しばらく待ってから再度お試しください。"})
         except requests.exceptions.RequestException as e:
-            co2_data = {"error": f"Failed to fetch data from World Bank API: {e}"}
+            return render(request, 'weatherco2app/error.html', {"error": f"データ取得に失敗しました: {str(e)}"})
 
         # グラフ生成
         graph_data = None
@@ -190,7 +208,7 @@ def submit_data(request):
             years = [item['year'] for item in co2_data]
             emissions = [item['co2_emission'] if isinstance(item['co2_emission'], (int, float)) else 0 for item in co2_data]
 
-            plt.figure(figsize=(8, 5))
+            fig = plt.figure(figsize=(8, 5))
             plt.bar(years, emissions)
             plt.title(f"CO₂ Emissions in {english_country_name} from {start_year} to {end_year}", fontname='DejaVu Sans')
             plt.xlabel("Year")
@@ -203,6 +221,9 @@ def submit_data(request):
             buffer.seek(0)
             graph_data = base64.b64encode(buffer.read()).decode('utf-8')
             buffer.close()
+            
+            # メモリリーク防止のためグラフをクローズ
+            plt.close(fig)
 
         context = {
             'country': country,
