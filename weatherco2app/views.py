@@ -2,6 +2,7 @@ import matplotlib
 matplotlib.use('Agg')  # バックエンドをAggに設定
 import matplotlib.pyplot as plt
 import requests
+from requests.adapters import HTTPAdapter
 import base64
 from io import BytesIO
 from matplotlib import font_manager
@@ -14,6 +15,7 @@ import urllib.parse
 import os
 import pycountry
 from django.views.generic import TemplateView
+from urllib3.util.retry import Retry
 
 def set_font():
     font_paths = [
@@ -170,8 +172,22 @@ def submit_data(request):
             date_range = f"{start_year}:{end_year}"
             api_url = f"http://api.worldbank.org/v2/country/{country_code}/indicator/EN.GHG.CO2.MT.CE.AR5?date={date_range}&format=json&per_page=500"
             
-            # タイムアウトを設定（10秒）
-            response = requests.get(api_url, timeout=10)
+            # 一時的な遅延や 5xx に耐えるため、再試行つきで API 呼び出し
+            retry = Retry(
+                total=3,
+                connect=3,
+                read=3,
+                backoff_factor=1,
+                status_forcelist=[429, 500, 502, 503, 504],
+                allowed_methods=["GET"],
+                raise_on_status=False,
+            )
+            session = requests.Session()
+            session.mount("https://", HTTPAdapter(max_retries=retry))
+            session.mount("http://", HTTPAdapter(max_retries=retry))
+
+            # 接続 10 秒、読み取り 30 秒
+            response = session.get(api_url, timeout=(10, 30))
             response.raise_for_status()
 
             data = response.json()
