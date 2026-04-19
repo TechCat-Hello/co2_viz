@@ -39,7 +39,7 @@ https://co2-viz-b6d8014c247d.herokuapp.com
 このアプリは、以下の環境で動作します。
 
 - **OS**: 任意のOS（Windows, macOS, Linux）
-- **Python**: 3.x
+- **Python**: 3.13.1（固定）
 - **ライブラリ**: 以下のPythonパッケージが必要です。
   - Django
   - Requests
@@ -73,9 +73,9 @@ source venv/bin/activate
 ```
 
 4. 必要な依存関係をインストールします。  
-次に、requirements.txtに記載されている依存関係をインストールします。 
+次に、ハッシュ検証付きでrequirements.txtに記載されている依存関係をインストールします。 
 ```bash  
-pip install -r requirements.txt
+pip install --require-hashes -r requirements.txt
 ```
 
 5. .envファイルの設定をします。  
@@ -101,6 +101,17 @@ python manage.py runserver
 ```  
 
 7. ブラウザで http://127.0.0.1:8000 にアクセスして、アプリを確認します。
+
+## 依存関係の固定運用
+
+- Python バージョンは [runtime.txt](runtime.txt) と [.python-version](.python-version) の `3.13.1` に固定しています。
+- 依存関係は [requirements.txt](requirements.txt) にバージョンとハッシュを固定しています。
+- 依存関係を更新する場合のみ、次のコマンドを実行してください。
+
+```bash
+pip install pip-tools
+pip-compile --generate-hashes --allow-unsafe --output-file requirements.txt requirements.in
+```
 
 
 ## 使い方
