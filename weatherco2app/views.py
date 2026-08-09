@@ -170,7 +170,7 @@ def submit_data(request):
             co2_data = []
             # 年範囲指定で一括取得（効率化）
             date_range = f"{start_year}:{end_year}"
-            api_url = f"http://api.worldbank.org/v2/country/{country_code}/indicator/EN.GHG.CO2.MT.CE.AR5?date={date_range}&format=json&per_page=500"
+            api_url = f"https://api.worldbank.org/v2/country/{country_code}/indicator/EN.GHG.CO2.MT.CE.AR5?date={date_range}&format=json&per_page=500"
             
             # 一時的な遅延や 5xx に耐えるため、再試行つきで API 呼び出し
             retry = Retry(
