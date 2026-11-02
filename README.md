@@ -39,7 +39,7 @@ https://co2-viz-b6d8014c247d.herokuapp.com
 このアプリは、以下の環境で動作します。
 
 - **OS**: 任意のOS（Windows, macOS, Linux）
-- **Python**: 3.13.1（固定）
+- **Python**: 3.13 系
 - **ライブラリ**: 以下のPythonパッケージが必要です。
   - Django
   - Requests
@@ -104,7 +104,7 @@ python manage.py runserver
 
 ## 依存関係の固定運用
 
-- Python バージョンは [runtime.txt](runtime.txt) と [.python-version](.python-version) の `3.13.1` に固定しています。
+- Python バージョンは [.python-version](.python-version) の `3.13` に固定しています。パッチバージョンは固定せず、セキュリティ修正を自動で取り込みます。
 - 依存関係は [requirements.txt](requirements.txt) にバージョンとハッシュを固定しています。
 - 依存関係を更新する場合のみ、次のコマンドを実行してください。
 
